@@ -1,11 +1,14 @@
 # navigation.nvim
 Plugin for VSCode like navigation in Neovim
 
-## Features
+## APIs
 
-- **Cursor Stack Navigation**: Navigate through your editing history with `back` and `forward` commands, similar to VSCode's "Go Back" and "Go Forward" functionality. This feature records your cursor positions when you make significant jumps (e.g., go to definition, references, or manual jumps).
-
-- **`navigation.record()`**: This function is crucial for building your navigation history. It records both the *origin* (where you were before the jump) and the *destination* (where you landed). To ensure a comprehensive history, you should call `navigation.record()` before any command that makes a significant cursor jump, such as `gd` (go to definition), `gr` (go to references), `C-]` (tag stack), or even custom navigation functions. It can also be called automatically on `CursorMoved` events to capture all movements.
+| Function                  | Description |
+|---------------------------|-------------|
+| `navigation.back()`       | Navigates backward through your cursor history. |
+| `navigation.forward()`    | Navigates forward through your cursor history. |
+| `navigation.record()`     | Records the current cursor position and the destination after a jump. This is essential for building the navigation history. |
+| `navigation.toggle()`     | Toggles the `navigation.nvim` plugin on or off. |
 
 ## Usage
 
@@ -72,9 +75,6 @@ require("lazy").setup({
     config = function(_, opts)
       local navigation = require("navigation")
       navigation.setup(opts)
-
-      -- Example keymap for the toggle function
-      vim.keymap.set("n", "<leader>nt", navigation.toggle, { desc = "Toggle Navigation" })
 
       -- Integrate navigation.record() with LSP commands
       vim.keymap.set("n", "gd", function()
