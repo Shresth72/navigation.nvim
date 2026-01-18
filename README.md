@@ -9,7 +9,21 @@ You can setup the plugin with the following code:
 require("navigation").setup()
 ```
 
-### With lazy.nvim
+### With [wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)
+
+```lua
+use {"Shresth72/navigation.nvim", tag = "*" } -- stable version
+use {"Shresth72/navigation.nvim"}
+```
+
+### With [junegunn/vim-plug](https://github.com/junegunn/vim-plug)
+
+```lua
+Plug "Shresth72/navigation.nvim", { "tag": "*" } -- stable version
+Plug "Shresth72/navigation.nvim"
+```
+
+### With [folke/lazy.nvim](https://github.com/folke/lazy.nvim)
 
 When you provide an `opts` table, `lazy.nvim` automatically calls `require("navigation").setup(opts)`. This is the simplest way to configure the plugin.
 
@@ -43,6 +57,7 @@ require("lazy").setup({
       local navigation = require("navigation")
       navigation.setup(opts)
 
+      -- Example keymap for the toggle function
       vim.keymap.set("n", "<leader>nt", navigation.toggle, { desc = "Toggle Navigation" })
     end,
   },
