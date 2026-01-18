@@ -32,6 +32,11 @@ function Navigation.setup(opts)
 	end
 end
 
+-- Expose cursor stack functions
+Navigation.record = main.record
+Navigation.back = main.back
+Navigation.forward = main.forward
+
 _G.Navigation = Navigation
 
 return _G.Navigation

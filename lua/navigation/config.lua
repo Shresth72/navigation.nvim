@@ -6,6 +6,10 @@ local Navigation = {}
 Navigation.options = {
 	enable = true,
 	debug = false,
+	keymaps = {
+		back = "<M-->",
+		forward = "<M-=>",
+	},
 }
 
 ---@private
