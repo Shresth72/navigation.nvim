@@ -4,6 +4,7 @@ local Navigation = {}
 
 ---@type table
 Navigation.options = {
+	enable = true,
 	debug = false,
 }
 
@@ -15,6 +16,7 @@ local defaults = vim.deepcopy(Navigation.options)
 function Navigation.defaults(options)
 	Navigation.options = vim.deepcopy(vim.tbl_deep_extend("keep", options or {}, defaults or {}))
 
+	assert(type(Navigation.options.enable) == "boolean", "`enable` must be a boolean")
 	assert(type(Navigation.options.debug) == "boolean", "`debug` must be a boolean")
 
 	return Navigation.options
