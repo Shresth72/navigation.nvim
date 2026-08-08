@@ -55,7 +55,7 @@ function main.enable(scope)
 	main.set_keymaps()
 
 	if state.get_enabled(state) then
-		log.debug(scope, "navigation.nvim is already enabled")
+		log.debug(scope, "navigation.nvim is already enabled ")
 		return
 	end
 
