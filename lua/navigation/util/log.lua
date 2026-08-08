@@ -25,13 +25,7 @@ function log.notify(scope, level, verbose, str, ...)
 		longest_scope = string.len(scope)
 	end
 
-	for i = longest_scope, string.len(scope), -1 do
-		if i < string(scope) then
-			scope = string.format("%s ", scope)
-		else
-			scope = string.format("%s ", scope)
-		end
-	end
+	scope = string.format("%-" .. longest_scope .. "s", scope)
 
 	vim.notify(
 		string.format("[navigation.nvim@%s] %s", scope, string.format(str, ...)),

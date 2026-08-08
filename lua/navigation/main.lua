@@ -35,13 +35,14 @@ end
 ---@param scope string
 ---@private
 function main.enable(scope)
+	main.set_keymaps()
+
 	if state.get_enabled(state) then
 		log.debug(scope, "navigation.nvim is already enabled")
 		return
 	end
 
-	main.set_keymaps()
-	main.create_commands()
+	-- main.create_commands()
 
 	state.set_enabled(state)
 	state.save(state)
