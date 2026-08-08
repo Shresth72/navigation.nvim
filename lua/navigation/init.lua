@@ -16,7 +16,7 @@ function Navigation.enable(scope)
 		_G.Navigation.config = config.options
 	end
 
-	main.toggle(scope or "public_api_emable")
+	main.toggle(scope or "public_api_enable")
 end
 
 function Navigation.disable()
