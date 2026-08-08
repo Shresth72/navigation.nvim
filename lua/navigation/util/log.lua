@@ -17,7 +17,8 @@ end
 ---@param ... any
 ---@private
 function log.notify(scope, level, verbose, str, ...)
-	if not verbose and _G.Navigation.config ~= nil and _G.Navigation.config.debug then
+	local debug_enabled = _G.Navigation.config ~= nil and _G.Navigation.config.debug
+	if not verbose and not debug_enabled then
 		return
 	end
 
