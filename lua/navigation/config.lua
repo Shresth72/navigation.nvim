@@ -10,10 +10,6 @@ Navigation.options = {
 		back = "<M-->",
 		forward = "<M-=>",
 	},
-	-- definition = "gd",
-	-- declaration = "gD",
-	-- references = "gr",
-	-- implementation = "gi",
 }
 
 ---@private

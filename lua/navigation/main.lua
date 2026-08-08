@@ -30,23 +30,6 @@ function main.set_keymaps()
 	if keymaps.forward then
 		vim.keymap.set("n", keymaps.forward, main.forward, { desc = "Navigation Forward" })
 	end
-
-	local lsp_jumps = {
-		definition = { keymaps.definition, vim.lsp.buf.definition, "LSP Definition" },
-		declaration = { keymaps.declaration, vim.lsp.buf.declaration, "LSP Declaration" },
-		references = { keymaps.references, vim.lsp.buf.references, "LSP References" },
-		implementation = { keymaps.implementation, vim.lsp.buf.implementation, "LSP Implementation" },
-	}
-
-	for _, jump in pairs(lsp_jumps) do
-		local lhs, lsp_fn, desc = jump[1], jump[2], jump[3]
-		if lhs then
-			vim.keymap.set("n", lhs, function()
-				main.record()
-				lsp_fn()
-			end, { desc = "Navigation: " .. desc })
-		end
-	end
 end
 
 ---@param scope string
