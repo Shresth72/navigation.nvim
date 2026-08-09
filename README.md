@@ -41,10 +41,12 @@ require("lazy").setup({
 
 ### Default Keybindings
 
-| Function | Keybinding | Description |
-|----------|------------|-------------|
-| Back     | `<M-->`   | Navigates backward through your cursor history. |
-| Forward  | `<M-=>`   | Navigates forward through your cursor history. |
+| Function             | Keybinding | Description                                                 |
+|----------------------|------------|-------------------------------------------------------------|
+| Back                 | `<M-->`    | Navigates backward through your cursor history.             |
+| Forward              | `<M-=>`    | Navigates forward through your cursor history.              |
+| Go To Definition     | `gd`       | Goes to the Definition of the term, and records the action. |
+| Go To References     | `gr`       | Goes to the References of the term, and records the action. |
 
 
 #### Advanced Usage (with keymaps and custom commands)
@@ -55,6 +57,7 @@ If you want to add custom keymaps, override defaults, or integrate `navigation.r
 require("lazy").setup({
   {
     "Shresth72/navigation.nvim",
+    lazy = false,
     opts = {
       enable = true,
       debug = false,
@@ -67,7 +70,7 @@ require("lazy").setup({
       local navigation = require("navigation")
       navigation.setup(opts)
 
-      -- Integrate navigation.record() with LSP commands
+      -- Set your own navigation.record() keymaps
       vim.keymap.set("n", "gd", function()
         navigation.record()
         vim.lsp.buf.definition()
