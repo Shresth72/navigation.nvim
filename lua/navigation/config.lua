@@ -9,6 +9,8 @@ Navigation.options = {
 	keymaps = {
 		back = "<M-->",
 		forward = "<M-=>",
+		goToDefinition = "gd",
+		goToReferences = "gr",
 	},
 }
 

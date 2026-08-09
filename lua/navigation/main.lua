@@ -30,6 +30,20 @@ function main.set_keymaps()
 	if keymaps.forward then
 		vim.keymap.set("n", keymaps.forward, main.forward, { desc = "Navigation Forward" })
 	end
+
+	if keymaps.goToDefinition then
+		vim.keymap.set("n", keymaps.goToDefinition, function()
+			main.record()
+			vim.lsp.buf.definition()
+		end, { desc = { "LSP Go to Definition (with Navigation Record)" } })
+	end
+
+	if keymaps.goToReferences then
+		vim.keymap.set("n", keymaps.goToReferences, function()
+			main.record()
+			vim.lsp.buf.references()
+		end, { desc = { "LSP Go to References (with Navigation Record)" } })
+	end
 end
 
 ---@param scope string
@@ -41,8 +55,6 @@ function main.enable(scope)
 		log.debug(scope, "navigation.nvim is already enabled ")
 		return
 	end
-
-	-- main.create_commands()
 
 	state.set_enabled(state)
 	state.save(state)
@@ -58,13 +70,6 @@ function main.disable(scope)
 
 	state.set_disabled(state)
 	state.save(state)
-end
-
----@private
-function main.create_commands()
-	vim.api.nvim_create_autocmd("CursorMoved", {
-		callback = main.record,
-	})
 end
 
 -- Expose cursor stack functions
