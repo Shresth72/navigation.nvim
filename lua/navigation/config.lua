@@ -11,7 +11,6 @@ Navigation.options = {
 		forward = "<M-=>",
 		goToDefinition = "gd",
 		goToReferences = "gr",
-		goToLineNumber = ":",
 	},
 }
 

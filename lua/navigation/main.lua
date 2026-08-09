@@ -49,14 +49,17 @@ function main.set_keymaps()
 		)
 	end
 
-	if keymaps.goToLineNumber then
-		vim.keymap.set(
-			"n",
-			keymaps.goToLineNumber,
-			main.goToLineNumber,
-			{ desc = "Go to line (with Navigation Record)" }
-		)
-	end
+	vim.api.nvim_create_autocmd("CmdlineLeave", {
+		callback = function()
+			if vim.fn.getcmdtype() ~= ":" then
+				return
+			end
+
+			local command = vim.fn.getcmdline()
+
+			main.goToLineNumber(command)
+		end,
+	})
 end
 
 ---@param scope string
@@ -108,15 +111,26 @@ function main.goToReferences()
 	vim.lsp.buf.references()
 end
 
-function main.goToLineNumber()
-	local line = vim.fn.input("Go to line: ")
+function main.goToLineNumber(line)
+	if type(line) ~= "string" then
+		return
+	end
+
 	if not line:match("^%d+$") then
 		return
 	end
 
-	line = tonumber(line)
+	local line_number = tonumber(line)
+	if not line_number then
+		return
+	end
+
+	local line_count = vim.api.nvim_buf_line_count(0)
+	if line_number < 1 or line_number > line_count then
+		return
+	end
+
 	cursor.record()
-	vim.api.nvim_win_set_cursor(0, { line, 0 })
 end
 
 return main
