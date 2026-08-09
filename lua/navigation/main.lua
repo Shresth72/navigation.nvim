@@ -48,6 +48,15 @@ function main.set_keymaps()
 			{ desc = "LSP Go to References (with Navigation Record)" }
 		)
 	end
+
+	if keymaps.goToLineNumber then
+		vim.keymap.set(
+			"n",
+			keymaps.goToLineNumber,
+			main.goToLineNumber,
+			{ desc = "Go to line (with Navigation Record)" }
+		)
+	end
 end
 
 ---@param scope string
@@ -97,6 +106,17 @@ end
 function main.goToReferences()
 	cursor.record_references()
 	vim.lsp.buf.references()
+end
+
+function main.goToLineNumber()
+	local line = vim.fn.input("Go to line: ")
+	if not line:match("^%d+$") then
+		return
+	end
+
+	line = tonumber(line)
+	cursor.record()
+	vim.api.nvim_win_set_cursor(0, { line, 0 })
 end
 
 return main
