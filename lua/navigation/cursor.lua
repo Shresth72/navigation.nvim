@@ -136,11 +136,9 @@ function M.record_references()
 	if M.pending then
 		return
 	end
-
 	M.pending = true
 
 	local origin = get_pos()
-
 	local autocmd_id
 
 	autocmd_id = vim.api.nvim_create_autocmd("CursorMoved", {
