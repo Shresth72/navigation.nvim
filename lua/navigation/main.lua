@@ -32,17 +32,21 @@ function main.set_keymaps()
 	end
 
 	if keymaps.goToDefinition then
-		vim.keymap.set("n", keymaps.goToDefinition, function()
-			main.record()
-			vim.lsp.buf.definition()
-		end, { desc = { "LSP Go to Definition (with Navigation Record)" } })
+		vim.keymap.set(
+			"n",
+			keymaps.goToDefinition,
+			main.goToDefinition,
+			{ desc = "LSP Go to Definition (with Navigation Record)" }
+		)
 	end
 
 	if keymaps.goToReferences then
-		vim.keymap.set("n", keymaps.goToReferences, function()
-			main.record()
-			vim.lsp.buf.references()
-		end, { desc = { "LSP Go to References (with Navigation Record)" } })
+		vim.keymap.set(
+			"n",
+			keymaps.goToReferences,
+			main.goToReferences,
+			{ desc = "LSP Go to References (with Navigation Record)" }
+		)
 	end
 end
 
@@ -83,6 +87,16 @@ end
 
 function main.forward()
 	cursor.forward()
+end
+
+function main.goToDefinition()
+	cursor.record()
+	vim.lsp.buf.definition()
+end
+
+function main.goToReferences()
+	cursor.record()
+	vim.lsp.buf.references()
 end
 
 return main
