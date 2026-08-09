@@ -169,6 +169,32 @@ function M.record_references()
 	end, 30000)
 end
 
+---@param line integer
+function M.record_line(line)
+	if M.pending then
+		return
+	end
+
+	local origin = get_pos()
+
+	local destination = {
+		buf = origin.buf,
+		cursor = {
+			line,
+			0,
+		},
+	}
+
+	if same_pos(origin, destination) then
+		return
+	end
+
+	push(origin)
+	push(destination)
+
+	M.pending = false
+end
+
 ---@param pos CursorPos|nil
 local function jump(pos)
 	if not pos then

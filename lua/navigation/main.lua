@@ -49,7 +49,7 @@ function main.set_keymaps()
 		)
 	end
 
-	vim.api.nvim_create_autocmd("CmdlineLeave", {
+	vim.api.nvim_create_autocmd("CmdlineLeavePre", {
 		callback = function()
 			if vim.fn.getcmdtype() ~= ":" then
 				return
@@ -111,26 +111,25 @@ function main.goToReferences()
 	vim.lsp.buf.references()
 end
 
-function main.goToLineNumber(line)
-	if type(line) ~= "string" then
+function main.goToLineNumber(command)
+	if type(command) ~= "string" then
+		return
+	end
+	if not command:match("^%d+$") then
 		return
 	end
 
-	if not line:match("^%d+$") then
-		return
-	end
-
-	local line_number = tonumber(line)
-	if not line_number then
+	local line = tonumber(command)
+	if not line then
 		return
 	end
 
 	local line_count = vim.api.nvim_buf_line_count(0)
-	if line_number < 1 or line_number > line_count then
+	if line < 1 or line > line_count then
 		return
 	end
 
-	cursor.record()
+	cursor.record_line(line)
 end
 
 return main
