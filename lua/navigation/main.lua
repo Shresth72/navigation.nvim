@@ -49,7 +49,7 @@ function main.set_keymaps()
 		)
 	end
 
-	vim.api.nvim_create_autocmd("CmdlineLeavePre", {
+	vim.api.nvim_create_autocmd("CmdlineLeave", {
 		callback = function()
 			if vim.fn.getcmdtype() ~= ":" then
 				return
