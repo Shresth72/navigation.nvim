@@ -85,8 +85,9 @@ function M.record()
 	})
 end
 
--- Record selected references from the quick list buffer
+-- Record selected reference from the quickfix list.
 ---@param origin CursorPos
+---@return boolean
 local function record_selected_reference(origin)
 	local item = vim.fn.getqflist({
 		idx = 0,
@@ -100,6 +101,7 @@ local function record_selected_reference(origin)
 	end
 
 	local qf_item = vim.fn.getqflist()[idx]
+
 	if not qf_item then
 		return false
 	end
@@ -116,36 +118,57 @@ local function record_selected_reference(origin)
 		},
 	}
 
+	-- Don't record special buffers.
 	if vim.bo[destination.buf].buftype ~= "" then
 		return false
 	end
 
 	push(origin)
 	push(destination)
+
+	M.pending = false
+
+	return true
 end
 
--- Records the origin, and the selected destination from the references
+-- Records the origin and the selected destination from gr.
 function M.record_references()
 	if M.pending then
 		return
 	end
+
 	M.pending = true
 
 	local origin = get_pos()
 
-	vim.api.nvim_create_autocmd("CursorMoved", {
+	local autocmd_id
+
+	autocmd_id = vim.api.nvim_create_autocmd("CursorMoved", {
 		callback = function()
+			-- Ignore movement inside the quickfix window.
 			if vim.bo.buftype == "quickfix" then
 				return
 			end
 
 			vim.schedule(function()
-				if M.pending then
-					record_selected_reference(origin)
+				if not M.pending then
+					return
+				end
+
+				if record_selected_reference(origin) then
+					vim.api.nvim_del_autocmd(autocmd_id)
 				end
 			end)
 		end,
 	})
+
+	-- Don't leave M.pending stuck forever if the user closes/cancels gr.
+	vim.defer_fn(function()
+		if M.pending then
+			M.pending = false
+			pcall(vim.api.nvim_del_autocmd, autocmd_id)
+		end
+	end, 30000)
 end
 
 ---@param pos CursorPos|nil
