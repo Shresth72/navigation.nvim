@@ -95,7 +95,7 @@ function main.goToDefinition()
 end
 
 function main.goToReferences()
-	cursor.record()
+	cursor.record_references()
 	vim.lsp.buf.references()
 end
 
