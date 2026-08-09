@@ -61,14 +61,7 @@ local function push(pos)
 	end
 end
 
--- Record both origin and destination for jumps (gd, gD, gr, etc.)
-function M.record_destination(origin)
-	local dest = get_pos()
-
-	push(origin)
-	push(dest)
-end
-
+-- Records both origin and destination for jumps (gd, gD, etc.)
 function M.record()
 	if M.pending then
 		return
@@ -92,21 +85,65 @@ function M.record()
 	})
 end
 
+-- Record selected references from the quick list buffer
+---@param origin CursorPos
+local function record_selected_reference(origin)
+	local item = vim.fn.getqflist({
+		idx = 0,
+		items = 0,
+	})
+
+	local idx = item.idx
+
+	if not idx or idx == 0 then
+		return false
+	end
+
+	local qf_item = vim.fn.getqflist()[idx]
+	if not qf_item then
+		return false
+	end
+
+	if not qf_item.bufnr or qf_item.bufnr == 0 then
+		return false
+	end
+
+	local destination = {
+		buf = qf_item.bufnr,
+		cursor = {
+			qf_item.lnum,
+			math.max(qf_item.col - 1, 0),
+		},
+	}
+
+	if vim.bo[destination.buf].buftype ~= "" then
+		return false
+	end
+
+	push(origin)
+	push(destination)
+end
+
+-- Records the origin, and the selected destination from the references
 function M.record_references()
 	if M.pending then
 		return
 	end
-
 	M.pending = true
+
 	local origin = get_pos()
 
 	vim.api.nvim_create_autocmd("CursorMoved", {
-		once = true,
 		callback = function()
-			-- Only Push origin
-			push(origin)
+			if vim.bo.buftype == "quickfix" then
+				return
+			end
 
-			M.pending = false
+			vim.schedule(function()
+				if M.pending then
+					record_selected_reference(origin)
+				end
+			end)
 		end,
 	})
 end
