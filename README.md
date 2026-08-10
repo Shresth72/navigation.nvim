@@ -56,6 +56,19 @@ require("lazy").setup({
 | Go To Definition     | `gd`       | Goes to the Definition of the term, and records the action. |
 | Go To References     | `gr`       | Goes to the References of the term, and records the action. |
 
+### Exposed Vim Commands
+
+| Command                    | Description                                    |
+| -------------------------- | ---------------------------------------------- |
+| `:NavigationBack`          | Navigate backward through your cursor history. |
+| `:NavigationForward`       | Navigate forward through your cursor history.  |
+| `:NavigationDefinition`    | Go to definition and record the navigation.    |
+| `:NavigationReferences`    | Go to references and record the navigation.    |
+| `:NavigationLine {number}` | Navigate to a line and record the navigation.  |
+| `:NavigationToggle`        | Toggle `navigation.nvim` on or off.            |
+| `:NavigationEnable`        | Enable `navigation.nvim`.                      |
+| `:NavigationDisable`       | Disable `navigation.nvim`.                     |
+
 
 #### Advanced Usage (with keymaps and custom commands)
 
