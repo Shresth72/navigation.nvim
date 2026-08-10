@@ -1,6 +1,14 @@
 # navigation.nvim
 Plugin for VSCode like navigation in Neovim
 
+## Features
+1. Navigate with Alt + -/+, when a navigation action is recorded (like VSCode).
+2. Going to definitions records the source and destination.
+3. Going to references:
+    - Records the source and chosen destination from the quickfix buffer.
+    - Also records when another destination is selected from already open quickfix.
+4. Records the source and destination, when using `:LineNumber` navigation.
+
 ## APIs
 
 | Function                  | Description |

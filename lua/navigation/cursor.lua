@@ -21,6 +21,12 @@ M.max_size = 100
 ---@type boolean
 M.pending = false
 
+---@type CursorPos|nil
+M.reference_origin = nil
+
+---@type integer|nil
+M.reference_autocmd = nil
+
 local function get_pos()
 	---@type CursorPos
 	return {
@@ -85,10 +91,9 @@ function M.record()
 	})
 end
 
--- Record selected reference from the quickfix list.
 ---@param origin CursorPos
----@return boolean
-local function record_selected_reference(origin)
+---@return CursorPos|nil
+local function get_selected_reference(origin)
 	local item = vim.fn.getqflist({
 		idx = 0,
 		items = 0,
@@ -97,17 +102,17 @@ local function record_selected_reference(origin)
 	local idx = item.idx
 
 	if not idx or idx == 0 then
-		return false
+		return nil
 	end
 
 	local qf_item = vim.fn.getqflist()[idx]
 
 	if not qf_item then
-		return false
+		return nil
 	end
 
 	if not qf_item.bufnr or qf_item.bufnr == 0 then
-		return false
+		return nil
 	end
 
 	local destination = {
@@ -120,15 +125,14 @@ local function record_selected_reference(origin)
 
 	-- Don't record special buffers.
 	if vim.bo[destination.buf].buftype ~= "" then
-		return false
+		return nil
 	end
 
-	push(origin)
-	push(destination)
+	if same_pos(origin, destination) then
+		return nil
+	end
 
-	M.pending = false
-
-	return true
+	return destination
 end
 
 -- Records the origin and the selected destination from gr.
@@ -137,8 +141,8 @@ function M.record_references()
 		return
 	end
 	M.pending = true
+	M.reference_origin = get_pos()
 
-	local origin = get_pos()
 	local autocmd_id
 
 	autocmd_id = vim.api.nvim_create_autocmd("CursorMoved", {
@@ -149,13 +153,19 @@ function M.record_references()
 			end
 
 			vim.schedule(function()
-				if not M.pending then
+				if not M.pending or not M.reference_origin then
 					return
 				end
 
-				if record_selected_reference(origin) then
-					vim.api.nvim_del_autocmd(autocmd_id)
+				local destination = get_selected_reference(M.reference_origin)
+				if not destination then
+					return
 				end
+
+				push(M.reference_origin)
+				push(destination)
+
+				M.reference_origin = destination
 			end)
 		end,
 	})
@@ -164,6 +174,7 @@ function M.record_references()
 	vim.defer_fn(function()
 		if M.pending then
 			M.pending = false
+			M.reference_origin = nil
 			pcall(vim.api.nvim_del_autocmd, autocmd_id)
 		end
 	end, 30000)
