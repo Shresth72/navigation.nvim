@@ -25,6 +25,9 @@ end
 
 function Navigation.setup(opts)
 	_G.Navigation.config = config.setup(opts)
+
+	main.set_commands()
+
 	if _G.Navigation.config.enable then
 		main.enable("setup")
 	else

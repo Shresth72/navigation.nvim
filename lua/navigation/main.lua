@@ -1,9 +1,14 @@
 local log = require("navigation.util.log")
 local state = require("navigation.state")
 local cursor = require("navigation.cursor")
+local commands = require("navigation.commands")
 
 -- internal methods
 local main = {}
+
+function main.set_commands()
+	commands.setup(main)
+end
 
 ---@param scope string
 ---@private
