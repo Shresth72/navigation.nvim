@@ -85,23 +85,10 @@ require("lazy").setup({
       keymaps = {
         back = "<C-o>",
         forward = "<C-i>",
+        goToDefinition = "gd",
+        goToReferences = "gr",
       }
     },
-    config = function(_, opts)
-      local navigation = require("navigation")
-      navigation.setup(opts)
-
-      -- Set your own navigation.record() keymaps
-      vim.keymap.set("n", "gd", function()
-        navigation.record()
-        vim.lsp.buf.definition()
-      end, { desc = "LSP Go to Definition (with Navigation Record)" })
-
-      vim.keymap.set("n", "gr", function()
-        navigation.record()
-        vim.lsp.buf.references()
-      end, { desc = "LSP Go to References (with Navigation Record)" })
-    end,
   },
   -- other plugins
 })
